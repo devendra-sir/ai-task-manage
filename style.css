@@ -1,0 +1,253 @@
+/* General Reset and Styling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.dark-theme {
+  background-color: #1e1e1e;
+  color: #f5f5f5;
+}
+
+/* Navbar */
+header {
+  background-color: #0078d7;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dark-theme header {
+  background-color: #005bb5;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.theme-switcher button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* Main Container */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.input-container {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.dark-theme .input-container {
+  background: #333;
+  border-color: #555;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+input:focus {
+  border-color: #0078d7;
+}
+
+.dark-theme input {
+  background: #444;
+  border-color: #666;
+  color: white;
+}
+
+button {
+  background-color: #0078d7;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #005bb5;
+  transform: scale(1.05);
+}
+
+.dark-theme button {
+  background-color: #005bb5;
+}
+
+#result {
+  margin-top: 20px;
+  padding: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #0078d7;
+  background-color: #eef6ff;
+  border: 1px solid #cce7ff;
+  border-radius: 5px;
+  min-height: 30px;
+}
+
+/* Task List */
+.task-list {
+  margin-top: 40px;
+  width: 100%;
+  max-width: 500px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.dark-theme .task-list {
+  background: #333;
+  border-color: #555;
+}
+
+.task-list h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.task-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.task-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 10px;
+  background: #eef6ff;
+  border-radius: 5px;
+}
+
+.dark-theme .task-list li {
+  background: #444;
+}
+
+.task-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.task-actions i {
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.task-actions i:hover {
+  color: #0078d7;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  padding: 10px 0;
+}
+
+/* Task Panel Styles */
+.task-panel {
+  position: fixed;
+  top: 0;
+  left: 0; /* Moved to left */
+  width: 250px; /* Reduced width */
+  height: 100%;
+  background-color: blue;
+  color: white;
+  display: none;
+  flex-direction: column;
+  padding: 10px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.task-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.task-panel-header button {
+  background-color: white;
+  color: blue;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.task-panel ul {
+  list-style-type: none;
+  padding: 0;
+  overflow-y: auto;
+  max-height: calc(100% - 50px); /* Adjusted height to fit panel */
+}
+
+.task-panel ul li {
+  padding: 10px 0;
+  border-bottom: 1px solid white;
+}
+
+/* View All Tasks Button */
+.view-all-btn {
+  background-color: blue;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  top: 20px;
+  left: 20px; /* Adjusted position */
+  border-radius: 10px;
+}
+
+.view-all-btn:hover {
+  background-color: darkblue;
+}

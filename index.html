@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Pro - Task Priority Analyzer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">Task Pro</div>
+    <div class="theme-switcher">
+      <button onclick="toggleTheme()">🌙</button>
+    </div>
+  </header>
+
+  <main>
+    <h1>AI Task Manager</h1>
+    <div class="input-container">
+      <input type="text" id="taskInput" placeholder="Enter your task description" />
+      <button onclick="addTask()">Add Task</button>
+      <div id="result">Enter a task to analyze priority.</div>
+    </div>
+
+    <div class="task-list">
+      <h2>Your Tasks</h2>
+      <ul id="taskList">
+        <!-- Tasks will appear here -->
+      </ul>
+    </div>
+
+    <!-- View All Tasks Button -->
+    <button id="viewAllTasksBtn" onclick="viewAllTasks()" class="view-all-btn">View All Tasks</button>
+
+    <!-- Side panel for View All Tasks -->
+    <div id="taskPanel" class="task-panel">
+      <div class="task-panel-header">
+        <h3>All Tasks</h3>
+        <button onclick="closeTaskPanel()">Close</button>
+      </div>
+      <ul id="allTasksList">
+        <!-- All tasks will appear here -->
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2024 Task Pro. All Rights Reserved.
+  </footer>
+
+  <script>
+    const taskList = JSON.parse(localStorage.getItem("tasks")) || [];
+
+    function toggleTheme() {
+      document.body.classList.toggle("dark-theme");
+      const button = document.querySelector(".theme-switcher button");
+      button.textContent = document.body.classList.contains("dark-theme") ? "☀️" : "🌙";
+    }
+
+    async function addTask() {
+      const taskInput = document.getElementById("taskInput").value.trim();
+      const resultDiv = document.getElementById("result");
+
+      if (!taskInput) {
+        resultDiv.textContent = "Please enter a task description.";
+        return;
+      }
+
+      resultDiv.textContent = "Analyzing...";
+
+      try {
+        const response = await fetch("http://localhost:3000/get-priority", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ taskDescription: taskInput }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          const task = { id: Date.now(), description: taskInput, priority: data.priority };
+          taskList.push(task);
+          localStorage.setItem("tasks", JSON.stringify(taskList));  // Save tasks to localStorage
+          renderTaskList();
+          resultDiv.textContent = `Priority: ${data.priority}`;
+          document.getElementById("taskInput").value = "";
+        } else {
+          resultDiv.textContent = `Error: ${data.error}`;
+        }
+      } catch (error) {
+        resultDiv.textContent = "An error occurred. Please try again.";
+      }
+    }
+
+    function editTask(id) {
+      const task = taskList.find(t => t.id === id);
+      if (!task) return;
+      const newDescription = prompt("Edit task description:", task.description);
+      if (newDescription && newDescription.trim()) {
+        task.description = newDescription.trim();
+        localStorage.setItem("tasks", JSON.stringify(taskList));  // Update tasks in localStorage
+        renderTaskList();
+      }
+    }
+
+    function deleteTask(id) {
+      const index = taskList.findIndex(t => t.id === id);
+      if (index > -1) {
+        taskList.splice(index, 1);
+        localStorage.setItem("tasks", JSON.stringify(taskList));  // Update tasks in localStorage
+        renderTaskList();
+      }
+    }
+
+    function renderTaskList() {
+      const taskListContainer = document.getElementById("taskList");
+      taskListContainer.innerHTML = "";
+
+      taskList.forEach(task => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span>${task.description} - Priority: ${task.priority}</span>
+          <div class="task-actions">
+            <i onclick="editTask(${task.id})" class="fa fa-edit"></i>
+            <i onclick="deleteTask(${task.id})" class="fa fa-trash"></i>
+          </div>
+        `;
+        taskListContainer.appendChild(li);
+      });
+    }
+
+    // View all tasks in a side panel
+    function viewAllTasks() {
+      const taskPanel = document.getElementById("taskPanel");
+      const allTasksList = document.getElementById("allTasksList");
+      allTasksList.innerHTML = ""; // Clear previous tasks
+
+      taskList.forEach(task => {
+        const li = document.createElement("li");
+        li.innerHTML = `${task.description} - Priority: ${task.priority}`;
+        allTasksList.appendChild(li);
+      });
+
+      taskPanel.style.display = "block";  // Show the side panel
+    }
+
+    // Close the task panel
+    function closeTaskPanel() {
+      const taskPanel = document.getElementById("taskPanel");
+      taskPanel.style.display = "none";  // Hide the side panel
+    }
+
+    // Initialize task list on page load
+    window.onload = renderTaskList;
+  </script>
+
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</body>
+</html>
